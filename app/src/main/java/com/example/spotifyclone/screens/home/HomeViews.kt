@@ -5,6 +5,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,10 +18,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -147,13 +151,12 @@ fun homeGridView(navController: NavController, context: Context) {
         Row(
             modifier = Modifier.fillMaxWidth()
         ) {
-            Box(
+            Row(
 
                 modifier = Modifier
-
                     .weight(1f)
-                    .background(Color(0xff444473))
-
+                    .clip( RoundedCornerShape(5.dp))
+                    .background(Color(0xff2a2a2a))
 
             ) {
                 Row(
@@ -166,19 +169,19 @@ fun homeGridView(navController: NavController, context: Context) {
                     verticalAlignment = Alignment.CenterVertically
 
                 ) {
-
                     Image(
 
                         painter = painterResource(id = homeGridList[0].languageImg),
 
                         contentDescription = null,
-
                         modifier = Modifier
                             .height(60.dp)
                             .width(60.dp)
+                            .background(Color(0xff2a2a2a), shape = RoundedCornerShape(5.dp))
                             .clickable {
 
                             },
+
 
                         )
 
@@ -197,13 +200,12 @@ fun homeGridView(navController: NavController, context: Context) {
 
             }
             Spacer(modifier = Modifier.width(10.dp))
-            Box(
-
+            Row(
                 modifier = Modifier
 
                     .weight(1f)
-                    .background(Color(0xff444473))
-
+                    .clip( RoundedCornerShape(5.dp))
+                    .background(Color(0xff2a2a2a))
 
             ) {
                 Row(
@@ -226,6 +228,7 @@ fun homeGridView(navController: NavController, context: Context) {
                         modifier = Modifier
                             .height(60.dp)
                             .width(60.dp)
+
                             .clickable {
 
                             },
@@ -251,12 +254,12 @@ fun homeGridView(navController: NavController, context: Context) {
         Row(
             modifier = Modifier.fillMaxWidth()
         ) {
-            Box(
+            Row(
 
                 modifier = Modifier
-
+                    .clip( RoundedCornerShape(5.dp))
                     .weight(1f)
-                    .background(Color(0xff444473))
+                    .background(Color(0xff2a2a2a))
 
 
             ) {
@@ -301,12 +304,12 @@ fun homeGridView(navController: NavController, context: Context) {
 
             }
             Spacer(modifier = Modifier.width(10.dp))
-            Box(
+            Row(
 
                 modifier = Modifier
-
                     .weight(1f)
-                    .background(Color(0xff444473))
+                    .clip( RoundedCornerShape(5.dp))
+                    .background(Color(0xff2a2a2a))
 
 
             ) {

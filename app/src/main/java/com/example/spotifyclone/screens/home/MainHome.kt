@@ -57,7 +57,7 @@ fun mainHome(navController: NavController,homeNavController: NavController){
             .fillMaxWidth()
             .fillMaxHeight()
             .background(
-                brush = Brush.verticalGradient(
+               /* brush = Brush.verticalGradient(
                     colors = listOf(
                         Color(0xff3B13B0),
                         Color(0xff271363),
@@ -65,7 +65,8 @@ fun mainHome(navController: NavController,homeNavController: NavController){
                         Color(0xff121212)
                     ),
 
-                    )
+                    )*/
+                Color(0xff121212)
             )
     ) {
         Column(
@@ -80,7 +81,7 @@ fun mainHome(navController: NavController,homeNavController: NavController){
             ) {
                 Text(
                     text = "Good evening",
-                    fontSize = 20.sp,
+                    fontSize = 24.sp,
                     color = Color.White,
                     fontWeight = FontWeight.Bold
                 )

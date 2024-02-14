@@ -17,9 +17,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -56,13 +58,12 @@ fun SearchDetail(homeNavController: NavController,musicPlayerViewModel: MusicPla
     Scaffold(
         topBar = {
                 TextField(
-
                     colors = TextFieldDefaults.colors(
                         focusedTextColor = Color.White,
                         unfocusedTextColor = Color.White,
                         cursorColor = Color.White,
-                        focusedContainerColor = Color.Gray,
-                        unfocusedContainerColor = Color.Gray
+                        focusedContainerColor = Color(0xFF312F2F),
+                        unfocusedContainerColor = Color(0xFF312F2F)
                     ),
                     value = textState,
 
@@ -81,7 +82,7 @@ fun SearchDetail(homeNavController: NavController,musicPlayerViewModel: MusicPla
                     },
                     leadingIcon = {
                         Row(
-                            modifier = Modifier.width(20.dp),
+                            modifier = Modifier.width(30.dp),
                             //   verticalAlignment = Alignment.CenterVertically
                         ) {
 
@@ -94,12 +95,28 @@ fun SearchDetail(homeNavController: NavController,musicPlayerViewModel: MusicPla
 
                         }
                     },
+                    trailingIcon ={
+                        Row(
+                            modifier = Modifier.width(30.dp),
+                            //   verticalAlignment = Alignment.CenterVertically
+                        ) {
+
+                            Icon(
+                                imageVector = Icons.Default.Clear,
+                                contentDescription = null,
+                                tint = Color.White
+                            )
+                            Spacer(modifier = Modifier.width(5.dp))
+
+                        }
+                    },
                     label = {
 
                     },
 
                     modifier = Modifier
-                        .fillMaxWidth()
+                        .fillMaxWidth().height(60.dp),
+
                 )
         }
     ) {
@@ -110,7 +127,7 @@ fun SearchDetail(homeNavController: NavController,musicPlayerViewModel: MusicPla
             .background(
                 color = Color.Black
             )
-            .padding(horizontal = 10.dp)
+          //  .padding(horizontal = 10.dp)
             .scrollable(
                 orientation = Orientation.Vertical,
 

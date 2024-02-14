@@ -1,6 +1,7 @@
-package com.example.spotifyclone.screens.library
+package com.example.spotifyclone.navigation.artist
 
 import android.content.Context
+import android.icu.text.UnicodeSet.SpanCondition
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -14,66 +15,55 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.spotifyclone.R
-import com.example.spotifyclone.model.ItemsItemDetail
+import com.example.spotifyclone.model.ArtistDetailResponse
+import com.example.spotifyclone.model.TracksItem
+import com.example.spotifyclone.screens.player.MediaPlayerConnection
 import com.example.spotifyclone.screens.detail.movieImage
 import com.example.spotifyclone.screens.detail.movieLink
 import com.example.spotifyclone.screens.detail.movieName
-import com.example.spotifyclone.screens.player.MediaPlayerConnection
-import com.example.spotifyclone.screens.player.mediaPlayerBinder
 import com.example.spotifyclone.viewModel.utils.LoadImageFromPlayListDetail
 import com.example.spotifyclone.viewModel.MusicPlayerViewModel
-import com.example.spotifyclone.viewModel.utils.LoadImageFromInternet
-import com.example.spotifyclone.viewModel.utils.LoadImageFromInternetPlaylist
+import com.example.spotifyclone.viewModel.utils.LoadArtistImageFromInternet
 import java.net.URLEncoder
 
 @Composable
-fun libraryPlaylist(context: Context, playListDetailList :List<ItemsItemDetail>, name: String,navController: NavController, musicViewModel: MusicPlayerViewModel) {
-
-    var textState by remember { mutableStateOf(TextFieldValue()) }
+fun ArtistLibraryPlayList(context: Context,name: String,artistDetail:ArtistDetailResponse, playListDetailList :List<TracksItem>, navController: NavController, musicViewModel: MusicPlayerViewModel) {
     val serviceIntent = musicViewModel.serviceIntent
-
-
     fun startProgressUpdates(isMusic: Boolean) {
 
         if(isMusic){
             serviceIntent?.action = "STOP_MUSIC"
             context.startService(serviceIntent)
         }
-
         serviceIntent?.action = "PLAY_MUSIC"
-        context.startService(serviceIntent )
-
-        Log.d("mposition",mediaPlayerBinder?.IsPlayingProgress().toString())
+        context.startService(serviceIntent)
         if (serviceIntent != null) {
-            context.bindService(serviceIntent, MediaPlayerConnection(),Context.BIND_AUTO_CREATE)
+            context.bindService(serviceIntent, MediaPlayerConnection(), Context.BIND_AUTO_CREATE)
         }
 
         if(musicViewModel.IsPlaying){
@@ -81,13 +71,6 @@ fun libraryPlaylist(context: Context, playListDetailList :List<ItemsItemDetail>,
         }
 
     }
-
-    DisposableEffect(Unit) {
-        onDispose {
-
-        }
-    }
-
 
     Column(
         modifier = Modifier
@@ -97,9 +80,8 @@ fun libraryPlaylist(context: Context, playListDetailList :List<ItemsItemDetail>,
     ) {
 
         LazyColumn {
-
-            item {
-                Column(
+            item{
+                Column (
                     modifier= Modifier.background(
                         brush = Brush.linearGradient(
                             colors = listOf(
@@ -110,117 +92,89 @@ fun libraryPlaylist(context: Context, playListDetailList :List<ItemsItemDetail>,
                             start = Offset(0.0f, 50.0f),
                             end= Offset(0.0f, 800.0f)
 
-                            )
-                    )
-                ) {
-
-                    Icon(imageVector = Icons.Default.ArrowBack,
-                        contentDescription = null,
-                        modifier = Modifier
-                            .padding(vertical = 20.dp, horizontal = 10.dp)
-                            .clickable {
-                                navController.popBackStack()
-                            },
-                        tint = Color.White
-                    )
-                    /*Row(
-                    ) {
-                        TextField(
-                            value = textState,
-                            onValueChange = { textState = it },
-
-                            label = {
-                                Row(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .background(color = Color(0x1AFFFFFF)),
-                                    verticalAlignment = Alignment.CenterVertically
-                                ) {
-
-                                    Icon(
-                                        imageVector = Icons.Default.Search,
-                                        contentDescription = null,
-                                        tint = Color.Black,
-                                        modifier = Modifier
-                                            .width(20.dp)
-                                            .height(20.dp)
-                                    )
-                                    Spacer(modifier = Modifier.width(5.dp))
-                                    Text(
-                                        "Find in playlist songs",
-                                        fontSize = 11.sp,
-
-                                        )
-                                }
-                            },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(20.dp)
-                                .padding(horizontal = 10.dp)
-                                .background(color = Color(0x1AFFFFFF))
                         )
-
-                    }*/
-                    Spacer(modifier = Modifier.height(10.dp))
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                    //    Log.d("imageUrl",playListDetailList[0].track?.album?.images?.get(0)?.url!!)
-                        LoadImageFromInternetPlaylist(imageUrl = playListDetailList[0].track?.album?.images?.get(0)?.url!!)
-                    }
-                    Text(
-                        name,
-                        color = Color.White,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(
-                            top = 20.dp,
-                            start = 10.dp,
-                            end = 10.dp,
-                            bottom = 2.dp
-                        ),
                     )
-                    Text(
-                        "266 songs", fontSize = 12.sp, color = Color.Gray,
-                        modifier = Modifier
+                        ){
+                    Box {
+
+                        LoadArtistImageFromInternet(artistDetail?.images?.get(0)?.url.toString())
+                        Box(
+
+                        ) {
+                            Box( modifier= Modifier.size(60.dp).padding(start = 16.dp, top = 16.dp).clip(CircleShape)
+                                .background(Color(0xFF2B2727)).clickable {
+                                    navController.popBackStack()
+                                },){}
+                              Icon(
+                                imageVector = Icons.Default.ArrowBack,
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .size(55.dp)
+                                    .padding(start = 20.dp, top = 20.dp),
+                                tint = Color.White
+
+                            )
+
+
+
+                        }
+                    }
+                    Column() {
+                        Text(name, color = Color.White, fontWeight = FontWeight.Bold, modifier = Modifier
+                            .padding(top = 20.dp, start = 10.dp, end = 10.dp, bottom = 2.dp)
+                            .clickable {
+                                Log.d(
+                                    "imagessssssssssssssss",
+                                    artistDetail?.images?.get(0)?.url.toString()
+                                )
+                            },)
+                        Text("266 songs", fontSize = 12.sp, color = Color.Gray, modifier = Modifier
                             .fillMaxWidth()
                             .height(15.dp)
-                            .padding(horizontal = 10.dp),
-                    )
-                    Row(
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 10.dp, vertical = 10.dp)
-                    ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.downloaded),
-                            contentDescription = null,
+                            .padding(horizontal = 10.dp),)
+                        Row(
+                            horizontalArrangement = Arrangement.SpaceBetween,
                             modifier = Modifier
-                                .height(25.dp)
-                                .width(30.dp)
-                        )
-                        Image(
-                            painter = painterResource(id = R.drawable.shuffle_detail),
-                            contentDescription = null,
-                            modifier = Modifier
-                                .height(50.dp)
-                                .width(60.dp)
-                        )
+                                .fillMaxWidth()
+                                .padding(horizontal = 10.dp, vertical = 10.dp)
+                        ){
+                            Image(
+                                painter = painterResource(id = R.drawable.downloaded),
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .height(25.dp)
+                                    .width(30.dp)
+                            )
+                            Row (){
+                                Image(
+                                    painter = painterResource(id = R.drawable.shuffle),
+                                    contentDescription = null,
+                                    modifier = Modifier
+                                        .height(30.dp)
+                                        .width(20.dp)
+                                )
+                                Spacer(modifier= Modifier.width(10.dp))
+                                Image(
+                                    painter = painterResource(id = R.drawable.shuffle_detail),
+                                    contentDescription = null,
+                                    modifier = Modifier
+                                        .height(50.dp)
+                                        .width(60.dp)
+                                )
+                            }
+
+                        }
 
                     }
                 }
-
             }
             items(playListDetailList.size) {
                 val lyricsString= mutableListOf<String>()
 
-                playListDetailList[it].track?.artists?.forEach { it
+                playListDetailList[it].artists?.forEach { it
                     lyricsString.add(it?.name.toString())
                 }
                 val stringResult = lyricsString.joinToString(",")
-
-                musicViewModel.MusicArtist= stringResult
 
                 Box(
                     modifier = Modifier
@@ -233,19 +187,19 @@ fun libraryPlaylist(context: Context, playListDetailList :List<ItemsItemDetail>,
                             serviceIntent?.apply {
                                 putExtra(
                                     "musicLink",
-                                    playListDetailList[it].track?.previewUrl
+                                    playListDetailList[it].previewUrl
                                 )
                                 putExtra(
                                     "musicName",
-                                    playListDetailList[it].track?.name!!
+                                    playListDetailList[it].name!!
                                 )
                                 putExtra(
                                     "musicImage",
-                                    playListDetailList[it].track?.album?.images?.get(0)?.url!!
+                                    playListDetailList[it].album?.images?.get(0)?.url!!
                                 )
                                 putExtra(
                                     "musicArtist",
-                                    playListDetailList[it].track?.artists?.get(0)?.name!!
+                                    playListDetailList[it].artists?.get(0)?.name!!
                                 )
                                 putExtra("IsPlaying", musicViewModel.IsPlaying)
                             }
@@ -255,18 +209,17 @@ fun libraryPlaylist(context: Context, playListDetailList :List<ItemsItemDetail>,
                                 musicViewModel.IsMusic = true;
                             }
 
-                            musicViewModel.MusicName = playListDetailList[it].track?.name!!
+                            musicViewModel.MusicName = playListDetailList[it].name!!
                             musicViewModel.MusicImage =
-                                playListDetailList[it].track?.album?.images?.get(0)?.url!!
-                            musicViewModel.MusicArtist =
-                                playListDetailList[it].track?.artists?.get(0)?.name!!
+                                playListDetailList[it].album?.images?.get(0)?.url!!
+                            musicViewModel.MusicArtist = stringResult
 
                             startProgressUpdates(musicViewModel.IsMusic)
 
-                            movieLink = URLEncoder.encode(playListDetailList[it].track?.previewUrl)
-                            movieName = URLEncoder.encode(playListDetailList[it].track?.name!!)
+                            movieLink = URLEncoder.encode(playListDetailList[it].previewUrl)
+                            movieName = URLEncoder.encode(playListDetailList[it].name!!)
                             movieImage =
-                                URLEncoder.encode(playListDetailList[it].track?.album?.images?.get(0)?.url!!)
+                                URLEncoder.encode(playListDetailList[it].album?.images?.get(0)?.url!!)
                         },
                 ) {
 
@@ -285,10 +238,10 @@ fun libraryPlaylist(context: Context, playListDetailList :List<ItemsItemDetail>,
                             verticalAlignment = Alignment.CenterVertically
                         ){
 
-                            LoadImageFromPlayListDetail(imageUrl = playListDetailList[it].track?.album?.images?.get(0)?.url!!)
+                            LoadImageFromPlayListDetail(imageUrl = playListDetailList[it].album?.images?.get(0)?.url!!)
                             Column {
                                 Text(
-                                    text = playListDetailList[it].track?.name!!,
+                                    text = playListDetailList[it].name!!,
                                     fontWeight = FontWeight.Bold,
 
                                     modifier = Modifier
@@ -299,7 +252,7 @@ fun libraryPlaylist(context: Context, playListDetailList :List<ItemsItemDetail>,
                                     color = Color.White,
                                     maxLines = 1,
                                     overflow = TextOverflow.Ellipsis
-                                    )
+                                )
                                 Spacer(modifier = Modifier.height(5.dp))
                                 Row(
                                     modifier = Modifier.padding(horizontal = 5.dp)
@@ -369,6 +322,7 @@ fun libraryPlaylist(context: Context, playListDetailList :List<ItemsItemDetail>,
                     }
                 }
             }
+
         }
     }
 }

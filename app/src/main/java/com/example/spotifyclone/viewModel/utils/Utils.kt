@@ -35,6 +35,25 @@ fun LoadPlayBoxImage(imageUrl: String) {
             .padding(8.dp)
     )
 }
+@Composable
+fun LoadLibraryListImage(imageUrl: String) {
+    val painter = rememberImagePainter(
+        data = imageUrl,
+        builder = {
+            crossfade(true)
+            placeholder(R.drawable.demoimg)
+        }
+    )
+
+    Image(
+        painter = painter,
+        contentDescription = null,
+        modifier = Modifier
+            .height(80.dp)
+            .width(80.dp)
+            .padding(8.dp)
+    )
+}
 
 @Composable
 fun LoadImageFromInternet(imageUrl: String) {
@@ -52,6 +71,26 @@ fun LoadImageFromInternet(imageUrl: String) {
         modifier = Modifier
             .height(150.dp)
             .width(150.dp) ,
+        contentScale = ContentScale.FillBounds,
+    )
+}
+
+@Composable
+fun LoadImageFromInternetPlaylist(imageUrl: String) {
+    val painter = rememberImagePainter(
+        data = imageUrl,
+        builder = {
+            crossfade(true)
+            placeholder(R.drawable.demoimg)
+        }
+    )
+
+    Image(
+        painter = painter,
+        contentDescription = null,
+        modifier = Modifier
+            .height(210.dp)
+            .width(200.dp) ,
         contentScale = ContentScale.FillBounds,
     )
 }
@@ -113,8 +152,8 @@ fun LoadImageFromPlayListDetail(imageUrl: String) {
         contentDescription = null,
 
         modifier = Modifier
-            .height(40.dp)
-            .width(50.dp)
+            .height(45.dp)
+            .width(55.dp)
     )
 
 }

@@ -41,9 +41,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -74,15 +76,7 @@ fun SearchPage(homeNavController: NavController,musicPlayerViewModel: MusicPlaye
     Box(modifier = Modifier
         .fillMaxSize()
         .background(
-            brush = Brush.verticalGradient(
-                colors = listOf(
-                    Color(0xff3B13B0),
-                    Color(0xff271363),
-                    Color(0xff1B1235),
-                    Color(0xff121212)
-                ),
-
-                )
+          color =  Color(0xff121212)
         )
         .padding(horizontal = 10.dp)
         .scrollable(
@@ -96,7 +90,10 @@ fun SearchPage(homeNavController: NavController,musicPlayerViewModel: MusicPlaye
         Column(
 
         ){
-            Text("Search", color = Color.White, fontWeight = FontWeight.Bold, modifier = Modifier.padding(vertical = 20.dp, horizontal = 10.dp),)
+            Text("Search", style = TextStyle(
+                fontWeight = FontWeight.Bold,
+                fontSize = 24.sp
+            ), color = Color.White, fontWeight = FontWeight.Bold, modifier = Modifier.padding(vertical = 20.dp, horizontal = 10.dp),)
             Box (
                 modifier= Modifier.fillMaxWidth().background(color = Color.White).clickable {
                     homeNavController.navigate("search_detail_page")
@@ -216,20 +213,24 @@ fun searchItemList(context: Context, playListDetailList :List<ItemsItemsSearch>,
     ) {
 
         LazyColumn {
-
             items(playListDetailList.size) {
                 Box(
-
                     modifier = Modifier
-                        .padding(vertical = 5.dp, horizontal = 10.dp)
-                        .background(Color.Gray)
+                        .padding(
+                            horizontal = 10.dp,
+                            //  vertical = 5.dp
+                        )
+                        .background(Color(0xff121212))
                         .clickable {
-
                             serviceIntent?.apply {
                                 putExtra(
-                                    "musicLink", playListDetailList[it].previewUrl,
+                                    "musicLink",
+                                    playListDetailList[it].previewUrl
                                 )
-                                putExtra("musicName", playListDetailList[it].name!!)
+                                putExtra(
+                                    "musicName",
+                                    playListDetailList[it].name!!
+                                )
                                 putExtra(
                                     "musicImage",
                                     playListDetailList[it].album?.images?.get(0)?.url!!
@@ -239,82 +240,27 @@ fun searchItemList(context: Context, playListDetailList :List<ItemsItemsSearch>,
                                     playListDetailList[it].artists?.get(0)?.name!!
                                 )
                                 putExtra("IsPlaying", musicPlayerViewModel.IsPlaying)
-
                             }
-                            //IsPlaying= true
+
+                            Log.d("mmm", musicPlayerViewModel.MusicName)
                             if (musicPlayerViewModel.MusicName != "Ajj ke baad") {
                                 musicPlayerViewModel.IsMusic = true;
                             }
-                            startProgressUpdates(musicPlayerViewModel.IsMusic)
 
                             musicPlayerViewModel.MusicName = playListDetailList[it].name!!
                             musicPlayerViewModel.MusicImage =
                                 playListDetailList[it].album?.images?.get(0)?.url!!
+                            musicPlayerViewModel.MusicArtist =
+                                playListDetailList[it].artists?.get(0)?.name!!
 
+                            startProgressUpdates(musicPlayerViewModel.IsMusic)
 
                             movieLink = URLEncoder.encode(playListDetailList[it].previewUrl)
                             movieName = URLEncoder.encode(playListDetailList[it].name!!)
                             movieImage =
                                 URLEncoder.encode(playListDetailList[it].album?.images?.get(0)?.url!!)
-
-
                         },
                 ) {
-/*
-                    Row(
-
-                        Modifier
-                            .fillMaxWidth()
-                            .height(60.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween
-
-                    ) {
-
-                        Row (
-                            verticalAlignment = Alignment.CenterVertically
-                        ){
-
-                            LoadImageFromPlayListDetail(imageUrl = playListDetailList[it].album?.images?.get(0)?.url!!)
-                            Text(
-
-                                text = playListDetailList[it].name!!,
-                                fontWeight = FontWeight.Bold,
-                                modifier = Modifier.padding(horizontal = 5.dp).width(250.dp),
-                                fontSize = 12.sp,
-
-                                color = Color.White,
-                                textAlign = TextAlign.Center
-                            )
-                        }
-
-
-                        Row (
-                            modifier= Modifier.padding(end = 20.dp)
-                        ){
-                            Image(
-                                painter = painterResource(id = R.drawable.likeon),
-
-                                contentDescription = null,
-                                modifier = Modifier
-                                    .height(15.dp)
-                                    .width(20.dp)
-
-                            )
-                            Spacer(modifier = Modifier.width(10.dp))
-                            Image(
-                                painter = painterResource(id = R.drawable.options),
-
-                                contentDescription = null,
-
-                                modifier = Modifier
-                                    .height(15.dp)
-                                    .width(20.dp)
-
-                            )
-                        }
-
-                    }*/
 
                     Row(
 
@@ -325,46 +271,93 @@ fun searchItemList(context: Context, playListDetailList :List<ItemsItemsSearch>,
                         horizontalArrangement = Arrangement.SpaceBetween
 
                     ) {
+                        val lyricsString= mutableListOf<String>()
+
+                        playListDetailList[it].artists?.forEach { it
+                            lyricsString.add(it?.name.toString())
+                        }
+                        val stringResult = lyricsString.joinToString(",")
+
+
                         Row (
                             verticalAlignment = Alignment.CenterVertically
                         ){
 
                             LoadImageFromPlayListDetail(imageUrl = playListDetailList[it].album?.images?.get(0)?.url!!)
-                            Text(
-                                text = playListDetailList[it].name!!,
-                                fontWeight = FontWeight.Bold,
+                            Column {
+                                Text(
+                                    text = playListDetailList[it].name!!,
+                                    fontWeight = FontWeight.Bold,
 
-                                modifier = Modifier
-                                    .padding(horizontal = 5.dp)
-                                    .width(220.dp),
-                                fontSize = 12.sp,
+                                    modifier = Modifier
+                                        .padding(horizontal = 5.dp)
+                                        .width(250.dp),
+                                    fontSize = 14.sp,
 
-                                color = Color.White,
-
+                                    color = Color.White,
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis
                                 )
+                                Spacer(modifier = Modifier.height(5.dp))
+                                Row(
+                                    modifier = Modifier.padding(horizontal = 5.dp)
+
+                                ){
+                                    Box(
+                                        modifier= Modifier
+                                            .background(
+                                                color = Color.Gray
+                                            )
+                                            .width(35.dp),
+                                        contentAlignment = Alignment.Center
+                                    ){
+                                        Text(
+                                            text = "LYRICS",
+                                            fontWeight = FontWeight.Bold,
+                                            fontSize = 10.sp,
+                                            color = Color.Black,
+                                        )
+
+                                    }
+                                    Text(
+                                        text = stringResult,
+                                        fontWeight = FontWeight.Bold,
+
+                                        modifier = Modifier
+                                            .padding(horizontal = 5.dp)
+                                            .width(215.dp),
+                                        fontSize = 10.sp,
+
+                                        color = Color.Gray,
+                                        maxLines = 1,
+                                        overflow = TextOverflow.Ellipsis
+                                    )
+
+                                }
+                            }
                         }
                         Row (
                             modifier= Modifier.padding(end = 20.dp)
                         ){
-                            Image(
+                            /*Image(
 
-                                painter = painterResource(id = R.drawable.likeon),
+                                painter = painterResource(id = R.drawable.liked),
 
                                 contentDescription = null,
 
                                 modifier = Modifier
                                     .height(15.dp)
                                     .width(20.dp)
-                            )
+                            )*/
                             Spacer(modifier = Modifier.width(10.dp))
                             Image(
 
-                                painter = painterResource(id = R.drawable.options),
+                                painter = painterResource(id = R.drawable.more_option),
 
                                 contentDescription = null,
 
                                 modifier = Modifier
-                                    .height(15.dp)
+                                    .height(16.dp)
                                     .width(20.dp)
 
                             )

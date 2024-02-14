@@ -36,7 +36,7 @@ fun BottomSheet(musicPlayerViewModel: MusicPlayerViewModel, onDismiss: () -> Uni
     val modalBottomSheetState = rememberModalBottomSheetState()
 
     ModalBottomSheet(
-        containerColor = Color.Black,
+        containerColor =Color(0xFF474646),
         onDismissRequest = { onDismiss() },
         sheetState = modalBottomSheetState,
         dragHandle = { BottomSheetDefaults.DragHandle() },

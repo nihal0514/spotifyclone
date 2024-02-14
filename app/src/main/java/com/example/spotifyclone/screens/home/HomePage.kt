@@ -30,7 +30,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import com.example.spotifyclone.screens.artist.ArtistDetailScreen
+import com.example.spotifyclone.navigation.artist.ArtistDetailScreen
 import com.example.spotifyclone.screens.detail.DetailScreen
 import com.example.spotifyclone.screens.library.LibraryPage
 import com.example.spotifyclone.screens.player.PlayBox
@@ -38,22 +38,7 @@ import com.example.spotifyclone.screens.player.mediaPlayerBinder
 import com.example.spotifyclone.screens.setting.SettingsPage
 import com.example.spotifyclone.search.SearchDetail
 import com.example.spotifyclone.search.SearchPage
-
-/*
-val LocalMusicViewModel = staticCompositionLocalOf<MusicPlayerViewModel> {
-    error("No MusicViewModel provided")
-}*/
-
-/*@Composable
-fun ProvideMusicViewModel(content: @Composable (MusicPlayerViewModel) -> Unit) {
-    val musicViewModel = remember { MusicPlayerViewModel() }
-    CompositionLocalProvider(LocalMusicViewModel provides musicViewModel) {
-        content(musicViewModel)
-    }
-}*/
-
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomePage(navController: NavController, musicViewModel: MusicPlayerViewModel) {
 

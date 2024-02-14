@@ -69,16 +69,7 @@ fun LibraryPage(homeNavController: NavController){
 
     Box(modifier = Modifier
         .fillMaxSize()
-        .background(
-            brush = Brush.verticalGradient(
-                colors = listOf(
-                    Color(0xff3B13B0),
-                    Color(0xff271363),
-                    Color(0xff1B1235),
-                    Color(0xff121212)
-                ),
-
-                )
+        .background(     color =  Color(0xff121212)
         )
         .padding(horizontal = 10.dp)
         .scrollable(
@@ -99,22 +90,29 @@ fun LibraryPage(homeNavController: NavController){
                     .padding(vertical = 20.dp, horizontal = 10.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text("Your Library", color = Color.White, fontWeight = FontWeight.Bold)
+                Text("Your Library", color = Color.White, fontSize = 24.sp, fontWeight = FontWeight.Bold)
                 Row(
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
 
                     Icon(
+                        modifier = Modifier
+                            .height(25.dp)
+                            .width(25.dp),
+                                imageVector = Icons.Default.Search,
+                        contentDescription = null,
+                        tint = Color.White,
+                    )
+                    Spacer(modifier = Modifier.width(10.dp))
+                    Icon(
+                        modifier = Modifier
+                            .height(25.dp)
+                            .width(25.dp),
                         imageVector = Icons.Default.Add,
                         contentDescription = null,
                         tint = Color.White
                     )
-                    Spacer(modifier = Modifier.width(10.dp))
-                    Icon(
-                        imageVector = Icons.Default.Search,
-                        contentDescription = null,
-                        tint = Color.White
-                    )
+
                 }
 
 
@@ -124,18 +122,18 @@ fun LibraryPage(homeNavController: NavController){
             ){
                 Row(
                     modifier = Modifier
-                        .width(75.dp)
+                        .width(76.dp)
                         .padding(4.dp)
                         .background(
-                            color = Color.Black,
+                            color = Color(0xFF2C2A2A),
                             shape = RoundedCornerShape(20.dp)
                         )
-                        .border(1.dp, Color.White, RoundedCornerShape(20.dp))
+                     //   .border(1.dp, , RoundedCornerShape(20.dp))
                 ) {
                     Text(
                         text = "Playlists",
                         modifier = Modifier.padding(12.dp),
-                        fontSize = 10.sp,
+                        fontSize = 12.sp,
                         color = Color.White,
                         fontWeight = FontWeight.Bold
                     )
@@ -145,33 +143,32 @@ fun LibraryPage(homeNavController: NavController){
                         .width(70.dp)
                         .padding(4.dp)
                         .background(
-                            color = Color.Black,
+                            color = Color(0xFF2C2A2A),
                             shape = RoundedCornerShape(20.dp)
                         )
-                        .border(1.dp, Color.White, RoundedCornerShape(20.dp))
+
                 ) {
                     Text(
                         text = "Albums",
                         modifier = Modifier.padding(12.dp),
-                        fontSize = 10.sp,
+                        fontSize = 12.sp,
                         color = Color.White,
                         fontWeight = FontWeight.Bold
                     )
                 }
                 Row(
                     modifier = Modifier
-                        .width(95.dp)
+                        .width(94.dp)
                         .padding(4.dp)
-                        .background(
-                            color = Color.Black,
+                        .background(color = Color(0xFF2C2A2A),
                             shape = RoundedCornerShape(20.dp)
                         )
-                        .border(1.dp, Color.White, RoundedCornerShape(20.dp))
+
                 ) {
                     Text(
                         text = "Downloaded",
                         modifier = Modifier.padding(12.dp),
-                        fontSize = 10.sp,
+                        fontSize = 12.sp,
                         color = Color.White,
                         fontWeight = FontWeight.Bold
                     )
@@ -199,7 +196,7 @@ fun LibraryPage(homeNavController: NavController){
                     Spacer(modifier = Modifier.width(15.dp))
                     Text(
                         text = "Most Recent",
-                        fontSize = 12.sp,
+                        fontSize = 16.sp,
                         color = Color.White,
                         fontWeight = FontWeight.Bold
                     )

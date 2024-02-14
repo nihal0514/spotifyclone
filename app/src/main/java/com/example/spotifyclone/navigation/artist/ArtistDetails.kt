@@ -1,4 +1,4 @@
-package com.example.spotifyclone.screens.artist
+package com.example.spotifyclone.navigation.artist
 
 import android.annotation.SuppressLint
 import android.util.Log
@@ -46,8 +46,20 @@ fun ArtistDetailScreen(id: String, name: String,navController: NavController,mus
     val artistDetail: ArtistDetailResponse = artistViewModel.artistDetail
     val artistTopTracks: List<TracksItem> = artistViewModel.artistTopTracks
 
-
     Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight()
+            .background(
+                color = Color(0xff121212),
+            )
+    ) {
+        if (artistTopTracks.size > 0){
+            ArtistLibraryPlayList(LocalContext.current,name,artistDetail,artistTopTracks,navController,musicViewModel)
+        }
+    }
+
+/*    Box(
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight()
@@ -63,49 +75,14 @@ fun ArtistDetailScreen(id: String, name: String,navController: NavController,mus
                     )
             )
     ){
-        Box(){
+        *//*Box(){
             Icon(imageVector = Icons.Default.ArrowBack, contentDescription =null,modifier = Modifier.padding(vertical = 20.dp, horizontal = 10.dp), tint = Color.White )
 
-            Column {
-                    LoadArtistImageFromInternet(artistDetail?.images?.get(0)?.url.toString())
-                Column() {
-                    Text(name, color = Color.White, fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 20.dp, start = 10.dp, end = 10.dp, bottom = 2.dp).clickable {
-                        Log.d("imagessssssssssssssss",artistDetail?.images?.get(0)?.url.toString())
-                    },)
-                    Text("266 songs", fontSize = 12.sp, color = Color.Gray, modifier = Modifier
-                        .fillMaxWidth()
-                        .height(15.dp)
-                        .padding(horizontal = 10.dp),)
-                    Row(
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 10.dp, vertical = 10.dp)
-                    ){
-                        Image(
-                            painter = painterResource(id = R.drawable.downloaded),
-                            contentDescription = null,
-                            modifier = Modifier
-                                .height(25.dp)
-                                .width(30.dp)
-                        )
-                        Image(
-                            painter = painterResource(id = R.drawable.shuffle),
-                            contentDescription = null,
-                            modifier = Modifier
-                                .height(50.dp)
-                                .width(60.dp)
-                        )
 
-                    }
-                       ArtistLibraryPlayList(LocalContext.current,artistTopTracks,navController,musicViewModel)
-
-                }
-            }
-        }
+        }*//*
 
 
-    }
+    }*/
 
 
 

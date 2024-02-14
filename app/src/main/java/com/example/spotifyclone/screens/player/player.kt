@@ -8,8 +8,10 @@ import android.os.IBinder
 import android.os.Looper
 import android.util.Log
 import android.widget.SeekBar
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -143,6 +145,7 @@ fun player(navController: NavController,musicName: String,musicImage : String,mu
         }
     }
 }
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun AudioPlayer(musicName: String,musicLink : String,musicPlayerViewModel: MusicPlayerViewModel) {
     Log.d("lllll",musicPlayerViewModel.serviceIntent.toString())
@@ -189,21 +192,24 @@ fun AudioPlayer(musicName: String,musicLink : String,musicPlayerViewModel: Music
     ){
         Column {
             Text(
-
+                modifier= Modifier.fillMaxWidth().basicMarquee(),
                 text = musicPlayerViewModel.MusicName,
                 style = TextStyle(
                     fontSize = 17.sp,
                     fontWeight = FontWeight(700),
                     color = Color(0xFFFFFFFF),
-                )
+                ),
+                maxLines = 1
             )
             Text(
-                text = "Black Sherif",
+                modifier= Modifier.fillMaxWidth().basicMarquee(),
+                text = musicPlayerViewModel.MusicArtist,
                 style = TextStyle(
                     fontSize = 14.sp,
                     fontWeight = FontWeight(450),
                     color = Color(0xB2FFFFFF),
-                )
+                ),
+                maxLines = 1,
             )
 
         }

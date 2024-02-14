@@ -24,6 +24,7 @@ import com.example.spotifyclone.R
 import com.example.spotifyclone.screens.detail.movieImage
 import com.example.spotifyclone.screens.detail.movieLink
 import com.example.spotifyclone.screens.detail.movieName
+import com.example.spotifyclone.screens.player.mediaPlayerBinder
 import com.squareup.picasso.Picasso
 import java.net.URLDecoder
 import java.net.URLEncoder
@@ -34,9 +35,10 @@ class MusicService() : Service() {
     private var lastPlaybackPosition: Int = 0
     private var isForegroundService = false
     private lateinit var notificationManager: NotificationManager
-    var notificationLayout: RemoteViews?= null
+    var notificationLayout: RemoteViews? = null
     var musicName = "Ajj ke baad"
-    var musicImage= ("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSI1V-71eaUtLGLGHkpTb4kYE6W5Kmz0reauA&usqp=CAU")
+    var musicImage =
+        ("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSI1V-71eaUtLGLGHkpTb4kYE6W5Kmz0reauA&usqp=CAU")
 
     var musicArtist = "Arijit Singh"
     var IsPlaying by mutableStateOf(true)
@@ -49,37 +51,44 @@ class MusicService() : Service() {
     override fun onBind(intent: Intent?): IBinder? {
         return MediaPlayerBinder()
     }
+
     override fun onCreate() {
         super.onCreate()
         createNotificationChannel()
-      //  restorePlaybackState()
+        //  restorePlaybackState()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 
         notificationLayout = RemoteViews(packageName, R.layout.notification_layout)
+        if (mediaPlayerBinder?.IsPlayingProgress() == true) {
+            notificationLayout?.setViewVisibility(R.id.playButton, View.VISIBLE)
+            notificationLayout?.setViewVisibility(R.id.pauseButton, View.GONE)
+        } else {
+            notificationLayout?.setViewVisibility(R.id.playButton, View.GONE)
+            notificationLayout?.setViewVisibility(R.id.pauseButton, View.VISIBLE)
 
+        }
 //        notificationLayout?.setTextViewText(R.id.SongName,musicName)
-
 
 
         when (intent?.action) {
 
             "PLAY_MUSIC" -> {
-      //          stop()
+                //          stop()
 
                 val musicLink = intent.getStringExtra("musicLink")
                 val musicNameTemp = intent.getStringExtra("musicName")
                 val musicImageTemp = intent.getStringExtra("musicImage")
                 val musicArtistTemp = intent.getStringExtra("musicArtist")
-             //   val musicIsPlaying = intent.getBooleanExtra("IsPlaying",true)
-                Log.d("musicName",musicLink.toString())
-                Log.d("musicName",musicNameTemp.toString())
-          //      Log.d("musicIsplaying", musicIsPlaying.toString())
-                musicName= musicNameTemp!!
-                musicImage= musicImageTemp!!
-                musicArtist= musicArtistTemp!!
-              //  IsPlaying= musicIsPlaying
+                //   val musicIsPlaying = intent.getBooleanExtra("IsPlaying",true)
+                Log.d("musicName", musicLink.toString())
+                Log.d("musicName", musicNameTemp.toString())
+                //      Log.d("musicIsplaying", musicIsPlaying.toString())
+                musicName = musicNameTemp!!
+                musicImage = musicImageTemp!!
+                musicArtist = musicArtistTemp!!
+                //  IsPlaying= musicIsPlaying
 
                 if (musicLink != null) {
                     mediaPlayer = MediaPlayer().apply {
@@ -92,15 +101,23 @@ class MusicService() : Service() {
                     showNotification()
                 }
             }
+
             "PAUSE_MUSIC" -> {
                 pause()
+                Log.d("isplayingmusic", mediaPlayerBinder?.IsPlayingProgress().toString())
 
             }
+
             "RESUME_MUSIC" -> {
                 resume()
+                Log.d("isplayingmusic", mediaPlayerBinder?.IsPlayingProgress().toString())
+
             }
+
             "STOP_MUSIC" -> {
                 stop()
+                Log.d("isplayingmusic", mediaPlayerBinder?.IsPlayingProgress().toString())
+
             }
         }
 
@@ -116,7 +133,7 @@ class MusicService() : Service() {
         )
 
         val pauseIntent = Intent(this, MusicService::class.java).apply {
-            action= "PAUSE_MUSIC"
+            action = "PAUSE_MUSIC"
             //          IsPlaying= false
         }
         val pausePendingIntent = PendingIntent.getService(
@@ -127,29 +144,35 @@ class MusicService() : Service() {
         )
 
 
-        if(IsPlaying){
-            notificationLayout?.setViewVisibility(R.id.playButton, View.VISIBLE)
-            notificationLayout?.setViewVisibility(R.id.pauseButton, View.GONE)
+        /* if(mediaPlayerBinder?.IsPlayingProgress()==true){
+             notificationLayout?.setViewVisibility(R.id.playButton, View.VISIBLE)
+             notificationLayout?.setViewVisibility(R.id.pauseButton, View.GONE)
 
-        }else {
-            notificationLayout?.setViewVisibility(R.id.playButton,View.GONE)
-            notificationLayout?.setViewVisibility(R.id.pauseButton,View.VISIBLE)
+         }else {
+             notificationLayout?.setViewVisibility(R.id.playButton,View.GONE)
+             notificationLayout?.setViewVisibility(R.id.pauseButton,View.VISIBLE)
 
-        }
+         }*/
         notificationLayout?.setOnClickPendingIntent(R.id.playButton, playPendingIntent)
         notificationLayout?.setOnClickPendingIntent(R.id.pauseButton, pausePendingIntent)
 
 
-        notificationLayout?.setTextViewText(R.id.SongName,musicName)
+        notificationLayout?.setTextViewText(R.id.SongName, musicName)
         notificationLayout?.setTextViewText(R.id.songArtist, musicArtist)
         return START_STICKY
     }
+
     private fun startForegroundService() {
         if (!isForegroundService) {
             val notification = createNotification()
             startForeground(NOTIFICATION_ID, notification)
             if (notificationLayout != null) {
-                Picasso.get().load(musicImage).into(notificationLayout!!, R.id.background_Image, NOTIFICATION_ID, notification)
+                Picasso.get().load(musicImage).into(
+                    notificationLayout!!,
+                    R.id.background_Image,
+                    NOTIFICATION_ID,
+                    notification
+                )
             }
 
             isForegroundService = true
@@ -158,7 +181,7 @@ class MusicService() : Service() {
 
     // Function to show the custom notification
     @SuppressLint("RemoteViewLayout")
-    private fun createNotification() : Notification {
+    private fun createNotification(): Notification {
 
         val notificationIntent = Intent(this, MainActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(
@@ -167,15 +190,17 @@ class MusicService() : Service() {
 
         return NotificationCompat.Builder(this, CHANNEL_ID)
             .setCustomBigContentView(notificationLayout)
-           // .setContentTitle(MusicName)
-          //  .setContentText("Now Playing")
+            // .setContentTitle(MusicName)
+            //  .setContentText("Now Playing")
             .setSmallIcon(R.drawable.downloaded)
             .setContentIntent(pendingIntent)
             .build()
     }
+
     private fun showNotification() {
         notificationManager.notify(NOTIFICATION_ID, createNotification())
     }
+
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
@@ -228,20 +253,25 @@ class MusicService() : Service() {
         mediaPlayer?.release()
         super.onDestroy()
     }
-    inner class MediaPlayerBinder: Binder() {
-        fun mediaPlayerPostion(): Int{
+
+    inner class MediaPlayerBinder : Binder() {
+        fun mediaPlayerPostion(): Int {
             return mediaPlayer.currentPosition
         }
-        fun mediaPlayerTotalDuration(): Int{
+
+        fun mediaPlayerTotalDuration(): Int {
             return mediaPlayer.duration
         }
+
         fun mediaPlayerSeekToProgress(position: Int) {
             return mediaPlayer.seekTo(position)
         }
-        fun IsPlayingProgress():Boolean{
+
+        fun IsPlayingProgress(): Boolean {
             return IsPlaying
         }
     }
+
     private fun savePlaybackState() {
         val sharedPreferences = getSharedPreferences("PlaybackState", Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
@@ -252,6 +282,7 @@ class MusicService() : Service() {
         editor.putInt("currentPlaybackPosition", mediaPlayer.currentPosition)
         editor.apply()
     }
+
     private fun restorePlaybackState() {
         val sharedPreferences = getSharedPreferences("PlaybackState", Context.MODE_PRIVATE)
         val currentMusicName = sharedPreferences.getString("currentMusicName", null)
@@ -260,11 +291,11 @@ class MusicService() : Service() {
         val currentMusicImage = sharedPreferences.getString("currentMusicImage", null)
         val savedPlaybackPosition = sharedPreferences.getInt("currentPlaybackPosition", 0)
 
-        musicName= currentMusicName!!
-        musicArtist= currentMusicArtist!!
-        musicName= currentMusicImage!!
+        musicName = currentMusicName!!
+        musicArtist = currentMusicArtist!!
+        musicName = currentMusicImage!!
 
-        movieLink= URLEncoder.encode(currentMusicName)
+        movieLink = URLEncoder.encode(currentMusicName)
         movieName = URLEncoder.encode(currentMusicArtist)
         movieImage = URLEncoder.encode(currentMusicImage)
 

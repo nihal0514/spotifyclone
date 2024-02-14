@@ -1,6 +1,7 @@
 package com.example.spotifyclone.screens.library
 
 import android.content.Context
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -9,7 +10,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -22,8 +25,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import coil.compose.rememberImagePainter
+import com.example.spotifyclone.R
 import com.example.spotifyclone.model.PlaylistItems
 import com.example.spotifyclone.viewModel.utils.LoadImageFromInternet
+import com.example.spotifyclone.viewModel.utils.LoadLibraryListImage
 import com.example.spotifyclone.viewModel.utils.LoadPlayBoxImage
 
 @Composable
@@ -44,8 +50,6 @@ fun libraryList(homeNavController: NavController,context: Context, playlistItems
                 Box(
 
                     modifier = Modifier
-                        .padding(horizontal = 10.dp, vertical = 5.dp)
-                        .background(Color(0xff444473))
                         .clickable {
                             homeNavController.navigate("detail_home/${playlistItems[it]?.id}/${playlistItems[it]?.name}")
 
@@ -59,7 +63,7 @@ fun libraryList(homeNavController: NavController,context: Context, playlistItems
                         verticalAlignment = Alignment.CenterVertically
                     ) {
 
-                        LoadPlayBoxImage(playlistItems[it]?.images?.get(0)?.url.toString())
+                        LoadLibraryListImage(playlistItems[it]?.images?.get(0)?.url.toString())
 
                         Text(
 
@@ -67,7 +71,7 @@ fun libraryList(homeNavController: NavController,context: Context, playlistItems
                             fontWeight = FontWeight.Bold,
 
                             modifier = Modifier.padding(horizontal = 5.dp),
-                            fontSize = 12.sp,
+                            fontSize = 14.sp,
 
                             color = Color.White
                         )
@@ -100,7 +104,7 @@ fun libraryGrid(homeNavController: NavController,context: Context, playlistItems
                 Text(
                     text =playlistItems[it].name!!,
                     modifier = Modifier.padding(12.dp),
-                    fontSize = 10.sp,
+                    fontSize = 12.sp,
                     color = Color.White,
                     fontWeight = FontWeight.Bold
                 )
@@ -108,4 +112,5 @@ fun libraryGrid(homeNavController: NavController,context: Context, playlistItems
         }
 
     }
+
 }

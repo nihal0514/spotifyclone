@@ -2,8 +2,10 @@ package com.example.spotifyclone.screens.player
 
 import android.content.Intent
 import android.util.Log
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -24,10 +26,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -40,6 +44,7 @@ import com.example.spotifyclone.service.MusicService
 import com.example.spotifyclone.viewModel.MusicPlayerViewModel
 
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PlayBox(navController: NavController,musicViewModel: MusicPlayerViewModel) {
    // val musicViewModel = LocalMusicViewModel.current
@@ -48,11 +53,13 @@ fun PlayBox(navController: NavController,musicViewModel: MusicPlayerViewModel) {
     val interactionSource = remember { MutableInteractionSource() }
     musicViewModel.serviceIntent = remember { Intent(context, MusicService::class.java) }
 
-    Box() {
         Box(
             modifier = Modifier
                 .padding(horizontal = 10.dp)
-                .background(Color.Gray, shape = RoundedCornerShape(8.dp))
+                .clip( RoundedCornerShape(6.dp))
+                .background(Color.Gray,
+                    //shape = RoundedCornerShape(8.dp)
+                     )
 
                 .clickable {
                     navController.navigate("music_player_screen/$movieName/$movieImage/$movieLink")
@@ -76,17 +83,21 @@ fun PlayBox(navController: NavController,musicViewModel: MusicPlayerViewModel) {
 
                             text = musicViewModel.MusicName,
                             fontWeight = FontWeight.Bold,
-                            modifier = Modifier.padding(horizontal = 5.dp),
+                            modifier = Modifier.padding(horizontal = 5.dp).width(250.dp).basicMarquee(),
                             fontSize = 14.sp,
-                            color = Color.White
+                            color = Color.White,
+                            maxLines = 1,
+
                         )
                         Spacer(modifier = Modifier.height(5.dp))
                         Text(
                             text= musicViewModel.MusicArtist,
                             fontWeight = FontWeight.Bold,
-                            modifier = Modifier.padding(horizontal = 5.dp),
+                            modifier = Modifier.padding(horizontal = 5.dp).width(250.dp).basicMarquee(),
                             fontSize = 10.sp,
-                            color = Color.White
+                            color = Color.White,
+                                    maxLines = 1,
+
                         )
 
                     }
@@ -154,4 +165,3 @@ fun PlayBox(navController: NavController,musicViewModel: MusicPlayerViewModel) {
         }
 
     }
-}

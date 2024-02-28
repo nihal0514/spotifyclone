@@ -36,17 +36,19 @@ import com.example.spotifyclone.model.ArtistsItem
 import com.example.spotifyclone.model.PlaylistItems
 import com.example.spotifyclone.model.homeGridModel
 import com.example.spotifyclone.viewModel.utils.LoadArtistImageFromInternetUI
+import com.example.spotifyclone.viewModel.utils.LoadGridImageItem
 import com.example.spotifyclone.viewModel.utils.LoadImageFromInternet
+import java.net.URLEncoder.encode
 
 @Composable
 fun homeGridView(navController: NavController, context: Context) {
     lateinit var homeGridList: List<homeGridModel>
     homeGridList = ArrayList<homeGridModel>()
 
-    homeGridList = homeGridList + homeGridModel("Liked Songs", R.drawable.likedsong,"5WORkg8FwGGN6q56QzHod2")
-    homeGridList = homeGridList + homeGridModel("Arijit Singh", R.drawable.arijits_photo,"37i9dQZF1DWYztMONFqfvX")
-    homeGridList = homeGridList + homeGridModel("Emotional Songs", R.drawable.emotionalsong,"37i9dQZF1DXdFesNN9TzXT")
-    homeGridList = homeGridList + homeGridModel("A Place We Knew", R.drawable.megahits,"37i9dQZF1DWVq1SXCH6uFn")
+    homeGridList = homeGridList + homeGridModel("Liked Songs","https://firebasestorage.googleapis.com/v0/b/flutter-fcm-f32c9.appspot.com/o/likedsong.png?alt=media&token=b22d37ff-3aa3-46b5-a976-98bb37e5763d","5WORkg8FwGGN6q56QzHod2")
+    homeGridList = homeGridList + homeGridModel("Arijit Singh","https://firebasestorage.googleapis.com/v0/b/flutter-fcm-f32c9.appspot.com/o/arijits_photo.jpg?alt=media&token=e1b1ce5d-7c6b-4397-a2fd-9c96b7ecde32","37i9dQZF1DWYztMONFqfvX")
+    homeGridList = homeGridList + homeGridModel("Emotional Songs", "https://firebasestorage.googleapis.com/v0/b/flutter-fcm-f32c9.appspot.com/o/emotionalsong.jpg?alt=media&token=5cdb9e51-babe-406d-8279-a3424e7a7b63","37i9dQZF1DXdFesNN9TzXT")
+    homeGridList = homeGridList + homeGridModel("A Place We Knew","https://firebasestorage.googleapis.com/v0/b/flutter-fcm-f32c9.appspot.com/o/megahits.jpg?alt=media&token=f98d29f5-ccd8-4e36-951b-e198500f946f","37i9dQZF1DWVq1SXCH6uFn")
 
     Column(
         modifier = Modifier.padding(horizontal = 10.dp)
@@ -77,7 +79,7 @@ fun homeGridView(navController: NavController, context: Context) {
 
                         Image(
 
-                            painter = painterResource(id =homeGridList[i].languageImg),
+                            painter = painterResource(id =homeGridList[i].gridName),
 
                             contentDescription = null,
 
@@ -122,7 +124,7 @@ fun homeGridView(navController: NavController, context: Context) {
 
                         Image(
 
-                            painter = painterResource(id =homeGridList[i+1].languageImg),
+                            painter = painterResource(id =homeGridList[i+1].gridName),
 
                             contentDescription = null,
 
@@ -155,40 +157,26 @@ fun homeGridView(navController: NavController, context: Context) {
 
                 modifier = Modifier
                     .weight(1f)
-                    .clip( RoundedCornerShape(5.dp))
+                    .clip(RoundedCornerShape(5.dp))
                     .background(Color(0xff2a2a2a))
 
             ) {
+                val encodedImageUrl = encode(homeGridList[0].gridImage)
                 Row(
 
                     Modifier
                         .fillMaxSize()
                         .clickable {
-                            navController.navigate("detail_home/${homeGridList[0].id}/${homeGridList[0].languageName}")
+                                   navController.navigate("detail_home/${homeGridList[0].id}/${homeGridList[0].gridName}/${encodedImageUrl}")
                         },
                     verticalAlignment = Alignment.CenterVertically
 
                 ) {
-                    Image(
-
-                        painter = painterResource(id = homeGridList[0].languageImg),
-
-                        contentDescription = null,
-                        modifier = Modifier
-                            .height(60.dp)
-                            .width(60.dp)
-                            .background(Color(0xff2a2a2a), shape = RoundedCornerShape(5.dp))
-                            .clickable {
-
-                            },
-
-
-                        )
-
+                    LoadGridImageItem(imageUrl = homeGridList[0].gridImage)
                     Spacer(modifier = Modifier.width(5.dp))
                     Text(
 
-                        text = homeGridList[0].languageName,
+                        text = homeGridList[0].gridName,
                         fontWeight = FontWeight.Bold,
 
                         modifier = Modifier.padding(horizontal = 5.dp),
@@ -204,41 +192,28 @@ fun homeGridView(navController: NavController, context: Context) {
                 modifier = Modifier
 
                     .weight(1f)
-                    .clip( RoundedCornerShape(5.dp))
+                    .clip(RoundedCornerShape(5.dp))
                     .background(Color(0xff2a2a2a))
 
             ) {
+                val encodedImageUrl = encode(homeGridList[1].gridImage)
                 Row(
 
                     Modifier
                         .fillMaxSize()
                         .clickable {
-                            navController.navigate("detail_home/${homeGridList[1].id}/${homeGridList[1].languageName}")
+                                   navController.navigate("detail_home/${homeGridList[1].id}/${homeGridList[1].gridName}/${encodedImageUrl}")
                         },
                     verticalAlignment = Alignment.CenterVertically
 
                 ) {
 
-                    Image(
-
-                        painter = painterResource(id = homeGridList[1].languageImg),
-
-                        contentDescription = null,
-
-                        modifier = Modifier
-                            .height(60.dp)
-                            .width(60.dp)
-
-                            .clickable {
-
-                            },
-
-                        )
+                    LoadGridImageItem(imageUrl = homeGridList[1].gridImage)
 
                     Spacer(modifier = Modifier.width(5.dp))
                     Text(
 
-                        text = homeGridList[1].languageName,
+                        text = homeGridList[1].gridName,
                         fontWeight = FontWeight.Bold,
 
                         modifier = Modifier.padding(horizontal = 5.dp),
@@ -257,42 +232,29 @@ fun homeGridView(navController: NavController, context: Context) {
             Row(
 
                 modifier = Modifier
-                    .clip( RoundedCornerShape(5.dp))
+                    .clip(RoundedCornerShape(5.dp))
                     .weight(1f)
                     .background(Color(0xff2a2a2a))
 
 
             ) {
+                val encodedImageUrl = encode(homeGridList[2].gridImage)
                 Row(
 
                     Modifier
                         .fillMaxSize()
                         .clickable {
-                            navController.navigate("detail_home/${homeGridList[2].id}/${homeGridList[2].languageName}")
+                                  navController.navigate("detail_home/${homeGridList[2].id}/${homeGridList[2].gridName}/${encodedImageUrl}")
                         },
                     verticalAlignment = Alignment.CenterVertically
 
                 ) {
 
-                    Image(
-
-                        painter = painterResource(id = homeGridList[2].languageImg),
-
-                        contentDescription = null,
-
-                        modifier = Modifier
-                            .height(60.dp)
-                            .width(60.dp)
-                            .clickable {
-
-                            },
-
-                        )
-
+                    LoadGridImageItem(imageUrl = homeGridList[2].gridImage)
                     Spacer(modifier = Modifier.width(5.dp))
                     Text(
 
-                        text = homeGridList[2].languageName,
+                        text = homeGridList[2].gridName,
                         fontWeight = FontWeight.Bold,
 
                         modifier = Modifier.padding(horizontal = 5.dp),
@@ -308,41 +270,29 @@ fun homeGridView(navController: NavController, context: Context) {
 
                 modifier = Modifier
                     .weight(1f)
-                    .clip( RoundedCornerShape(5.dp))
+                    .clip(RoundedCornerShape(5.dp))
                     .background(Color(0xff2a2a2a))
 
 
             ) {
+                val encodedImageUrl = encode(homeGridList[3].gridImage)
                 Row(
 
                     Modifier
                         .fillMaxSize()
                         .clickable {
-                            navController.navigate("detail_home/${homeGridList[3].id}/${homeGridList[3].languageName}")
+                                navController.navigate("detail_home/${homeGridList[3].id}/${homeGridList[3].gridName}/${encodedImageUrl}")
                         },
                     verticalAlignment = Alignment.CenterVertically
 
                 ) {
 
-                    Image(
-
-                        painter = painterResource(id = homeGridList[3].languageImg),
-
-                        contentDescription = null,
-
-                        modifier = Modifier
-                            .height(60.dp)
-                            .width(60.dp)
-                            .clickable {
-
-                            },
-
-                        )
+                   LoadGridImageItem(imageUrl = homeGridList[3].gridImage)
 
                     Spacer(modifier = Modifier.width(5.dp))
                     Text(
 
-                        text = homeGridList[3].languageName,
+                        text = homeGridList[3].gridName,
                         fontWeight = FontWeight.Bold,
 
                         modifier = Modifier.padding(horizontal = 5.dp),
@@ -367,14 +317,14 @@ fun myPlayListUi(navController: NavController, context: Context, playlistItems: 
         modifier= Modifier.padding(vertical = 15.dp)
     ){
         items(playlistItems.size){
+            val encodedImageUrl = encode(playlistItems[it]?.images?.get(0)?.url.toString())
             Row{
                 if(it==0)
                     Spacer(modifier = Modifier.width(10.dp))
-
                 Column(
                     modifier = Modifier
                         .clickable {
-                            navController.navigate("detail_home/${playlistItems[it]?.id}/${playlistItems[it]?.name}")
+                            navController.navigate("detail_home/${playlistItems[it]?.id}/${playlistItems[it]?.name}/${encodedImageUrl}")
                         }
                 ) {
                     LoadImageFromInternet(imageUrl = playlistItems[it]?.images?.get(0)?.url.toString())

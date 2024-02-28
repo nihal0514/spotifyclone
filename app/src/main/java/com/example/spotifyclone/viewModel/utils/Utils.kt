@@ -36,6 +36,25 @@ fun LoadPlayBoxImage(imageUrl: String) {
     )
 }
 @Composable
+fun LoadBottomSheetImage(imageUrl: String) {
+    val painter = rememberImagePainter(
+        data = imageUrl,
+        builder = {
+            crossfade(true)
+            placeholder(R.drawable.demoimg)
+        }
+    )
+
+    Image(
+        painter = painter,
+        contentDescription = null,
+        modifier = Modifier
+            .height(70.dp)
+            .width(70.dp)
+            .padding(8.dp)
+    )
+}
+@Composable
 fun LoadLibraryListImage(imageUrl: String) {
     val painter = rememberImagePainter(
         data = imageUrl,
@@ -156,4 +175,24 @@ fun LoadImageFromPlayListDetail(imageUrl: String) {
             .width(55.dp)
     )
 
+}
+
+@Composable
+fun LoadGridImageItem(imageUrl: String) {
+    val painter = rememberImagePainter(
+        data = imageUrl,
+        builder = {
+            crossfade(true)
+            placeholder(R.drawable.demoimg)
+        }
+    )
+
+    Image(
+        painter = painter,
+        contentDescription = null,
+        modifier = Modifier
+            .height(60.dp)
+            .width(60.dp) ,
+        contentScale = ContentScale.FillBounds,
+    )
 }

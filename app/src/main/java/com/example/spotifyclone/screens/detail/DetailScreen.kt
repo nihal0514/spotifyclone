@@ -1,6 +1,7 @@
 package com.example.spotifyclone.screens.detail
 
 import android.annotation.SuppressLint
+import android.graphics.BitmapFactory
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -47,6 +48,7 @@ import com.example.spotifyclone.R
 import com.example.spotifyclone.model.ItemsItemDetail
 import com.example.spotifyclone.viewModel.PlayListViewModel
 import androidx.compose.runtime.*
+import androidx.palette.graphics.Palette
 import com.example.spotifyclone.screens.library.libraryPlaylist
 import com.example.spotifyclone.viewModel.MusicPlayerViewModel
 
@@ -59,14 +61,40 @@ var movieImage by mutableStateOf("")
 fun DetailScreen(
     id: String,
     name: String,
+    image: String,
     navController: NavController,
     musicViewModel: MusicPlayerViewModel
 ) {
 
     val playListViewModel = hiltViewModel<PlayListViewModel>()
     val playListDetailList: List<ItemsItemDetail> = playListViewModel.myPlaylistDetail
+    val context= LocalContext.current
 
     playListViewModel.getMyPlaylistDetail(id)
+    LaunchedEffect(key1 = image, block = {
+        val bitmap= musicViewModel.getBitmapFromUrl(image)
+        musicViewModel.playListImageBitmap= bitmap
+        print(bitmap)
+    })
+    val bitmap = remember {
+        BitmapFactory.decodeResource(context.resources, R.drawable.demoimg)
+    }
+    var bgColor = remember {
+        Color(0x00000000)
+    }
+
+    musicViewModel.playlistPalette=  Palette.from(bitmap).generate()
+
+
+    musicViewModel.playlistPalette=  Palette.from(bitmap).generate()
+    if (musicViewModel.playListImageBitmap != null) {
+        musicViewModel.playlistPalette = Palette.from(musicViewModel.playListImageBitmap!!).generate()
+    }
+
+    if(musicViewModel.playlistPalette?.dominantSwatch != null){
+        bgColor = Color(musicViewModel.playlistPalette?.dominantSwatch!!.rgb)
+
+    }
 
     Box(
         modifier = Modifier
@@ -82,6 +110,8 @@ fun DetailScreen(
                 LocalContext.current,
                 playListDetailList,
                 name,
+                image,
+                bgColor,
                 navController,
                 musicViewModel
             )

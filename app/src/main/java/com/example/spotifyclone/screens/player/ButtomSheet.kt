@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -28,6 +29,7 @@ import coil.compose.rememberAsyncImagePainter
 import coil.decode.SvgDecoder
 import com.example.spotifyclone.R
 import com.example.spotifyclone.viewModel.MusicPlayerViewModel
+import com.example.spotifyclone.viewModel.utils.LoadBottomSheetImage
 import com.example.spotifyclone.viewModel.utils.LoadPlayBoxImage
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -36,10 +38,11 @@ fun BottomSheet(musicPlayerViewModel: MusicPlayerViewModel, onDismiss: () -> Uni
     val modalBottomSheetState = rememberModalBottomSheetState()
 
     ModalBottomSheet(
-        containerColor =Color(0xFF474646),
+        containerColor =Color(0xFF242424),
         onDismissRequest = { onDismiss() },
         sheetState = modalBottomSheetState,
         dragHandle = { BottomSheetDefaults.DragHandle() },
+        shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
     ) {
 
         Column(
@@ -52,11 +55,10 @@ fun BottomSheet(musicPlayerViewModel: MusicPlayerViewModel, onDismiss: () -> Uni
                 verticalAlignment = Alignment.CenterVertically
             ) {
 
-                LoadPlayBoxImage(musicPlayerViewModel.MusicImage)
+                LoadBottomSheetImage(musicPlayerViewModel.MusicImage)
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
                 ) {
                     Column(
                         modifier = Modifier
@@ -66,7 +68,7 @@ fun BottomSheet(musicPlayerViewModel: MusicPlayerViewModel, onDismiss: () -> Uni
                         Text(
 
                             text = musicPlayerViewModel.MusicName,
-                            fontWeight = FontWeight.Bold,
+                          //  fontWeight = FontWeight.W200,
                             modifier = Modifier.padding(horizontal = 5.dp),
                             fontSize = 14.sp,
                             color = Color.White
@@ -74,7 +76,7 @@ fun BottomSheet(musicPlayerViewModel: MusicPlayerViewModel, onDismiss: () -> Uni
                         Spacer(modifier = Modifier.height(5.dp))
                         Text(
                             text = musicPlayerViewModel.MusicArtist,
-                            fontWeight = FontWeight.Bold,
+                            fontWeight = FontWeight.W400,
                             modifier = Modifier.padding(horizontal = 5.dp),
                             fontSize = 10.sp,
                             color = Color.White
@@ -96,14 +98,14 @@ fun BottomSheet(musicPlayerViewModel: MusicPlayerViewModel, onDismiss: () -> Uni
             ) {
                 PlayerSvgImage(R.drawable.liked)
                 Spacer(modifier = Modifier.width(10.dp))
-                Text("Like", color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.W100)
+                Text("Like", color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.W400)
             }
             Row(
                 modifier= Modifier.padding(horizontal = 20.dp, vertical = 15.dp)
             ) {
                 PlayerSvgImage(R.drawable.add_to_playlist)
                 Spacer(modifier = Modifier.width(10.dp))
-                Text("Add to Playlist", color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.W100)
+                Text("Add to Playlist", color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.W400)
             }
             Row(
                 modifier= Modifier.padding(horizontal = 20.dp, vertical = 15.dp)

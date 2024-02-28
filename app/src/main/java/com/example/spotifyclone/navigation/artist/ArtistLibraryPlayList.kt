@@ -1,6 +1,7 @@
 package com.example.spotifyclone.navigation.artist
 
 import android.content.Context
+import android.content.Intent
 import android.icu.text.UnicodeSet.SpanCondition
 import android.util.Log
 import androidx.compose.foundation.Image
@@ -46,6 +47,7 @@ import com.example.spotifyclone.screens.player.MediaPlayerConnection
 import com.example.spotifyclone.screens.detail.movieImage
 import com.example.spotifyclone.screens.detail.movieLink
 import com.example.spotifyclone.screens.detail.movieName
+import com.example.spotifyclone.service.MusicService
 import com.example.spotifyclone.viewModel.utils.LoadImageFromPlayListDetail
 import com.example.spotifyclone.viewModel.MusicPlayerViewModel
 import com.example.spotifyclone.viewModel.utils.LoadArtistImageFromInternet
@@ -53,17 +55,16 @@ import java.net.URLEncoder
 
 @Composable
 fun ArtistLibraryPlayList(context: Context,name: String,artistDetail:ArtistDetailResponse, playListDetailList :List<TracksItem>, navController: NavController, musicViewModel: MusicPlayerViewModel) {
-    val serviceIntent = musicViewModel.serviceIntent
     fun startProgressUpdates(isMusic: Boolean) {
 
         if(isMusic){
-            serviceIntent?.action = "STOP_MUSIC"
-            context.startService(serviceIntent)
+            musicViewModel.serviceIntent?.action = "STOP_MUSIC"
+            context.startService(musicViewModel.serviceIntent)
         }
-        serviceIntent?.action = "PLAY_MUSIC"
-        context.startService(serviceIntent)
-        if (serviceIntent != null) {
-            context.bindService(serviceIntent, MediaPlayerConnection(), Context.BIND_AUTO_CREATE)
+        musicViewModel.serviceIntent?.action = "PLAY_MUSIC"
+        context.startService(musicViewModel.serviceIntent)
+        if (musicViewModel.serviceIntent != null) {
+            context.bindService(musicViewModel.serviceIntent!!, MediaPlayerConnection(), Context.BIND_AUTO_CREATE)
         }
 
         if(musicViewModel.IsPlaying){
@@ -184,7 +185,10 @@ fun ArtistLibraryPlayList(context: Context,name: String,artistDetail:ArtistDetai
                         )
                         .background(Color(0xff121212))
                         .clickable {
-                            serviceIntent?.apply {
+                            if(musicViewModel.serviceIntent == null){
+                                musicViewModel.serviceIntent = Intent(context, MusicService::class.java)
+                            }
+                            musicViewModel.serviceIntent?.apply {
                                 putExtra(
                                     "musicLink",
                                     playListDetailList[it].previewUrl
@@ -212,7 +216,6 @@ fun ArtistLibraryPlayList(context: Context,name: String,artistDetail:ArtistDetai
                             musicViewModel.MusicName = playListDetailList[it].name!!
                             musicViewModel.MusicImage =
                                 playListDetailList[it].album?.images?.get(0)?.url!!
-                            musicViewModel.MusicArtist = stringResult
 
                             startProgressUpdates(musicViewModel.IsMusic)
 

@@ -1,6 +1,7 @@
 package com.example.spotifyclone.screens.player
 
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -20,6 +21,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -35,6 +37,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.palette.graphics.Palette
 import com.example.spotifyclone.R
 import com.example.spotifyclone.screens.detail.movieImage
 import com.example.spotifyclone.screens.detail.movieLink
@@ -51,15 +54,45 @@ fun PlayBox(navController: NavController,musicViewModel: MusicPlayerViewModel) {
     val context= LocalContext.current
 
     val interactionSource = remember { MutableInteractionSource() }
-    musicViewModel.serviceIntent = remember { Intent(context, MusicService::class.java) }
+     musicViewModel.serviceIntent = remember { Intent(context, MusicService::class.java) }
 
+    LaunchedEffect(key1 = musicViewModel.MusicImage, block = {
+        val bitmap= musicViewModel.getBitmapFromUrl(musicViewModel.MusicImage)
+        musicViewModel.albumImageBitmap= bitmap
+        print(bitmap)
+    })
+
+    val bitmap = remember {
+        BitmapFactory.decodeResource(context.resources, R.drawable.demoimg)
+    }
+
+    var bgColor = remember {
+        Color(0x00000000)
+    }
+/*
+    var palette  = remember {
+
+        Palette.from(bitmap).generate()
+
+    }*/
+
+    musicViewModel.palette=  Palette.from(bitmap).generate()
+    if (musicViewModel.albumImageBitmap != null) {
+        musicViewModel.palette = Palette.from(musicViewModel.albumImageBitmap!!).generate()
+    }
+
+    if(musicViewModel.palette?.dominantSwatch != null){
+        bgColor = Color(musicViewModel.palette?.dominantSwatch!!.rgb)
+
+    }
         Box(
             modifier = Modifier
                 .padding(horizontal = 10.dp)
-                .clip( RoundedCornerShape(6.dp))
-                .background(Color.Gray,
+                .clip(RoundedCornerShape(6.dp))
+                .background(
+                    bgColor
                     //shape = RoundedCornerShape(8.dp)
-                     )
+                )
 
                 .clickable {
                     navController.navigate("music_player_screen/$movieName/$movieImage/$movieLink")
@@ -78,12 +111,17 @@ fun PlayBox(navController: NavController,musicViewModel: MusicPlayerViewModel) {
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Column(  modifier = Modifier.padding(horizontal = 5.dp).width(220.dp),) {
+                    Column(  modifier = Modifier
+                        .padding(horizontal = 5.dp)
+                        .width(220.dp),) {
                         Text(
 
                             text = musicViewModel.MusicName,
                             fontWeight = FontWeight.Bold,
-                            modifier = Modifier.padding(horizontal = 5.dp).width(250.dp).basicMarquee(),
+                            modifier = Modifier
+                                .padding(horizontal = 5.dp)
+                                .width(250.dp)
+                                .basicMarquee(),
                             fontSize = 14.sp,
                             color = Color.White,
                             maxLines = 1,
@@ -93,7 +131,10 @@ fun PlayBox(navController: NavController,musicViewModel: MusicPlayerViewModel) {
                         Text(
                             text= musicViewModel.MusicArtist,
                             fontWeight = FontWeight.Bold,
-                            modifier = Modifier.padding(horizontal = 5.dp).width(250.dp).basicMarquee(),
+                            modifier = Modifier
+                                .padding(horizontal = 5.dp)
+                                .width(250.dp)
+                                .basicMarquee(),
                             fontSize = 10.sp,
                             color = Color.White,
                                     maxLines = 1,

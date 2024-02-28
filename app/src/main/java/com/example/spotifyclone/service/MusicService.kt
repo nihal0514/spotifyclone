@@ -192,6 +192,7 @@ class MusicService() : Service() {
             .setCustomBigContentView(notificationLayout)
             // .setContentTitle(MusicName)
             //  .setContentText("Now Playing")
+            .setStyle(object : NotificationCompat.Style(){})
             .setSmallIcon(R.drawable.downloaded)
             .setContentIntent(pendingIntent)
             .build()
@@ -311,4 +312,5 @@ class MusicService() : Service() {
         }
     }
 }
+
 

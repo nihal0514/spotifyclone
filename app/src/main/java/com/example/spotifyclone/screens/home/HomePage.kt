@@ -2,6 +2,10 @@ package com.example.spotifyclone.screens.home
 
 import android.annotation.SuppressLint
 import android.util.Log
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -69,16 +73,39 @@ fun HomePage(navController: NavController, musicViewModel: MusicPlayerViewModel)
     var selectedItemIndex by rememberSaveable {
         mutableStateOf(0)
     }
+    val homeNavController = rememberNavController()
+    var isPlayBoxVisible by remember {
+        mutableStateOf(false)
+    }
+    LaunchedEffect(key1 = musicViewModel.serviceIntent, block ={
+        isPlayBoxVisible = musicViewModel.serviceIntent != null
+    } )
     Surface(
         modifier = Modifier.fillMaxSize(),
     ) {
-        val homeNavController = rememberNavController()
 
         Scaffold(
             bottomBar = {
                 Column {
 
-                    PlayBox(navController, musicViewModel)
+                    Log.d("isPlayBoxVisible",isPlayBoxVisible.toString())
+                    if(isPlayBoxVisible)
+                        PlayBox(navController, musicViewModel)
+
+                  /*  AnimatedVisibility(
+                        visible = isPlayBoxVisible,
+                        enter = fadeIn(
+                            // Overwrites the initial value of alpha to 0.4f for fade in, 0 by default
+                            initialAlpha = 0.4f
+                        ),
+                        exit = fadeOut(
+                            // Overwrites the default animation with tween
+                            animationSpec = tween(durationMillis = 250)
+                        )
+                    ) {
+                        PlayBox(navController, musicViewModel)
+                    }
+*/
 
                     NavigationBar(
                         containerColor = Color(0xFF121212),
@@ -130,10 +157,11 @@ fun HomePage(navController: NavController, musicViewModel: MusicPlayerViewModel)
                     SearchDetail(homeNavController, musicViewModel)
                 }
 
-                composable("detail_home/{id}/{name}") {
+                composable("detail_home/{id}/{name}/{image}") {
                     val id = it.arguments?.getString("id") ?: ""
                     val name = it.arguments?.getString("name") ?: ""
-                    DetailScreen(id, name, homeNavController, musicViewModel)
+                    val image = it.arguments?.getString("image") ?: ""
+                    DetailScreen(id, name, image,homeNavController, musicViewModel)
                 }
 
                 composable("artist_home/{id}/{name}") {

@@ -31,6 +31,7 @@ import com.example.spotifyclone.model.PlaylistItems
 import com.example.spotifyclone.viewModel.utils.LoadImageFromInternet
 import com.example.spotifyclone.viewModel.utils.LoadLibraryListImage
 import com.example.spotifyclone.viewModel.utils.LoadPlayBoxImage
+import java.net.URLEncoder
 
 @Composable
 fun libraryList(homeNavController: NavController,context: Context, playlistItems: List<PlaylistItems>) {
@@ -45,13 +46,14 @@ fun libraryList(homeNavController: NavController,context: Context, playlistItems
     ) {
 
         LazyColumn {
-
             items(playlistItems.size) {
+                val encodedImageUrl =
+                    URLEncoder.encode(playlistItems[it]?.images?.get(0)?.url.toString())
                 Box(
 
                     modifier = Modifier
                         .clickable {
-                            homeNavController.navigate("detail_home/${playlistItems[it]?.id}/${playlistItems[it]?.name}")
+                            homeNavController.navigate("detail_home/${playlistItems[it]?.id}/${playlistItems[it]?.name}/${encodedImageUrl}")
 
                         },
                 ) {
@@ -93,10 +95,10 @@ fun libraryGrid(homeNavController: NavController,context: Context, playlistItems
         ) {
 
         items(playlistItems.size) {
-
+            val encodedImageUrl = URLEncoder.encode(playlistItems[it]?.images?.get(0)?.url.toString())
             Column (
                 modifier = Modifier.padding(10.dp).clickable {
-                    homeNavController.navigate("detail_home/${playlistItems[it]?.id}/${playlistItems[it]?.name}")
+                    homeNavController.navigate("detail_home/${playlistItems[it]?.id}/${playlistItems[it]?.name}/${encodedImageUrl}")
 
                 },
             ){

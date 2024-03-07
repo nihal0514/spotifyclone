@@ -1,5 +1,5 @@
-<img src=https://github.com/nihal0514/spotifyclone/assets/77735813/62a19ca2-2ab1-45ef-be5a-32c6bb4095da width="300" height="500">
-<img src=https://github.com/nihal0514/spotifyclone/assets/77735813/1014f385-71ad-4eb0-a006-b5959670f8ef width="300" height="500">
+<img src=https://github.com/nihal0514/spotifyclone/assets/77735813/62a19ca2-2ab1-45ef-be5a-32c6bb4095da width="300" height="600">
+<img src=https://github.com/nihal0514/spotifyclone/assets/77735813/1014f385-71ad-4eb0-a006-b5959670f8ef width="300" height="600">
 <img src=https://github.com/nihal0514/spotifyclone/assets/77735813/c0b4d6e1-8d7d-445b-b8cd-87c6da55d0a2 width="300" height="600">
 <img src=https://github.com/nihal0514/spotifyclone/assets/77735813/43d3c895-ddfd-4605-9403-cae184765c69 width="300" height="600">
 <img src=https://github.com/nihal0514/spotifyclone/assets/77735813/0a377c14-98b4-476e-9776-51bc8c715ce1 width="300" height="600">

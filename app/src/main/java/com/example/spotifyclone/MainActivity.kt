@@ -14,6 +14,7 @@ import com.example.spotifyclone.navigation.Navigation
 import com.example.spotifyclone.ui.theme.SpotifycloneTheme
 import dagger.hilt.android.AndroidEntryPoint
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.rememberNavController
 
@@ -35,6 +36,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             SpotifycloneTheme {
                 Surface(
+                    contentColor= Color(0xFF121212),
+                    color = Color(0xFF121212),
                     modifier = Modifier.fillMaxSize(),
                 ) {
                   //  val musicViewModel = LocalMusicViewModel.current

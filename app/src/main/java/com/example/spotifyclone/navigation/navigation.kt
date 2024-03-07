@@ -19,9 +19,11 @@ import java.net.URLDecoder
 
 @Composable
 fun Navigation() {
+
     val navController = rememberNavController()
     val musicViewModel = hiltViewModel<MusicPlayerViewModel>()
     // ProvideMusicViewModel { musicViewModel ->
+
 
     NavHost(
         navController = navController,

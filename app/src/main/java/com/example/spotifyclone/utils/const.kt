@@ -3,6 +3,6 @@ package com.example.spotifyclone.utils
 class ConstVariables{
     companion object {
         val  BASE_URL: String= "https://newsapi.org/v2/"
-        var api_key: String= "Bearer BQABCM2tgAXKlY4JbBSrQJPgnxAYne67tSYWGoPec8UM_yYvJJjUpyBIHR_vVjRk34GkGnNLuGvSeayL8AYiFttn7Dgh2xXSNJ7f4lYKxOskaLdq1XBr0Q76kaH3wvClSWujtMSRBhLNVZPqE1OWUoeVfa-Cw-3uhaHO18WQr1S2ibXI2rVNlK2bF2t9cFXmE2Nf0A"
+        var api_key: String= "Bearer BQDuUEKbnxxV69JTqXG6AAOtrScwT5cXtK7ltCtnjgzQ0XfOOZaVeMMSn4lTkdQTtxAnpCAe4Iq8UuQUBUD77DtPb0giNFpbzp_VytQjLgrd7AosfdBi9REdTiKqYzIWtb2WC2RnWlc2bs51wbT2in2S8lndLKYyofHKhSgBSKz--K3lSt_-DQwBlNnExcsBo5TCiw"
     }
  }
